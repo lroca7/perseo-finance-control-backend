@@ -2,8 +2,10 @@ package com.perseo.finance.controller
 
 import com.perseo.finance.dto.CardResponse
 import com.perseo.finance.dto.CreateCardRequest
+import com.perseo.finance.dto.EstimatedMonthlyPaymentResponse
 import com.perseo.finance.dto.UpdateCardRequest
 import com.perseo.finance.service.CardService
+import com.perseo.finance.service.EstimatedPaymentService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,7 +19,8 @@ import java.util.UUID
 @RestController
 @RequestMapping("/api/cards")
 class CardController(
-    private val cardService: CardService
+    private val cardService: CardService,
+    private val estimatedPaymentService: EstimatedPaymentService
 ) {
 
     @GetMapping
@@ -41,4 +44,9 @@ class CardController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun eliminar(@PathVariable cardId: UUID) =
         cardService.eliminar(cardId)
+
+    /** Pago aproximado del mes en curso (cuota #1 de cada línea activa + cargos fijos). */
+    @GetMapping("/{cardId}/pago-estimado-mes")
+    fun pagoEstimadoMes(@PathVariable cardId: UUID): EstimatedMonthlyPaymentResponse =
+        estimatedPaymentService.estimarMesActual(cardId)
 }

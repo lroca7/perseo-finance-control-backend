@@ -16,7 +16,10 @@ data class CreateCardRequest(
     val cupoTotal: BigDecimal,
 
     @field:DecimalMin(value = "0.0", message = "La tasa no puede ser negativa")
-    val tasaEA: BigDecimal
+    val tasaEA: BigDecimal,
+
+    @field:DecimalMin(value = "0.0", message = "Los cargos fijos no pueden ser negativos")
+    val cargosFijosMensuales: BigDecimal = BigDecimal.ZERO
 )
 
 typealias UpdateCardRequest = CreateCardRequest
@@ -27,5 +30,6 @@ data class CardResponse(
     val alias: String,
     val cupoTotal: BigDecimal,
     val tasaEA: BigDecimal,
+    val cargosFijosMensuales: BigDecimal,
     val saldoTotalLineas: BigDecimal
 )

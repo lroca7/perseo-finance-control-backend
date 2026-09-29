@@ -31,7 +31,8 @@ class CardService(
             banco = request.banco,
             alias = request.alias,
             cupoTotal = request.cupoTotal,
-            tasaEA = request.tasaEA
+            tasaEA = request.tasaEA,
+            cargosFijosMensuales = request.cargosFijosMensuales
         )
         return cardRepository.save(card).toResponse()
     }
@@ -43,6 +44,7 @@ class CardService(
         card.alias = request.alias
         card.cupoTotal = request.cupoTotal
         card.tasaEA = request.tasaEA
+        card.cargosFijosMensuales = request.cargosFijosMensuales
         card.updatedAt = Instant.now()
         return cardRepository.save(card).toResponse()
     }
@@ -65,6 +67,7 @@ class CardService(
         alias = alias,
         cupoTotal = cupoTotal,
         tasaEA = tasaEA,
+        cargosFijosMensuales = cargosFijosMensuales,
         saldoTotalLineas = creditLines
             .filterNot { it.ignorada }
             .fold(BigDecimal.ZERO) { acc, line -> acc + line.saldoPendiente }

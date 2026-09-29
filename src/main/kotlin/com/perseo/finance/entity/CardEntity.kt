@@ -27,6 +27,14 @@ class CardEntity(
     @Column(name = "tasa_ea", nullable = false, precision = 6, scale = 3)
     var tasaEA: BigDecimal = BigDecimal.ZERO,
 
+    /**
+     * Cuota de manejo + seguro + otros cargos fijos recurrentes, agregados
+     * en un solo valor editable por el usuario. No ligado a ninguna línea
+     * de crédito puntual — se usa para el "pago aproximado del mes en curso".
+     */
+    @Column(name = "cargos_fijos_mensuales", nullable = false, precision = 14, scale = 2)
+    var cargosFijosMensuales: BigDecimal = BigDecimal.ZERO,
+
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: Instant = Instant.now(),
 
