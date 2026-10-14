@@ -13,4 +13,6 @@ out/
 ### OS ###
 .DS_Store
 
+hs_err_pid*.log
+
 src/main/resources/application.yml
