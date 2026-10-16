@@ -121,6 +121,9 @@ class ExpenseBlocksService(
         incomeRepository.deleteAll(
             incomeRepository.findByUserIdAndAnioAndMesOrderByCategoriaAsc(userId, anio, mes)
         )
+        // El borrado debe ir a la BD antes de insertar: Hibernate ejecuta los
+        // INSERT al hacer flush y la tabla tiene restricción única por mes.
+        incomeRepository.flush()
         items.forEach {
             incomeRepository.save(
                 ExpenseIncomeEntity(
@@ -144,6 +147,7 @@ class ExpenseBlocksService(
             if (!cat.activa) badRequest("La categoría '${cat.nombre}' está inactiva.")
         }
         billRepository.deleteAll(billRepository.findByUserIdAndAnioAndMes(userId, anio, mes))
+        billRepository.flush()
         items.forEach {
             billRepository.save(
                 ExpenseBillEntity(
@@ -161,6 +165,7 @@ class ExpenseBlocksService(
         savingRepository.deleteAll(
             savingRepository.findByUserIdAndAnioAndMesOrderByNombreAsc(userId, anio, mes)
         )
+        savingRepository.flush()
         items.forEach {
             savingRepository.save(
                 ExpenseMonthSavingEntity(
@@ -177,6 +182,7 @@ class ExpenseBlocksService(
         debtRepository.deleteAll(
             debtRepository.findByUserIdAndAnioAndMesOrderByNombreAsc(userId, anio, mes)
         )
+        debtRepository.flush()
         items.forEach {
             debtRepository.save(
                 ExpenseMonthDebtEntity(

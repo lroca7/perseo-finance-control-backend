@@ -1,5 +1,6 @@
 package com.perseo.finance.common
 
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -29,4 +30,10 @@ class GlobalExceptionHandler {
     fun handleDuplicate(ex: DuplicateResourceException): ResponseEntity<ErrorResponse> =
         ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ErrorResponse(listOf(FieldErrorItem("periodoFin", ex.message ?: "Ya existe"))))
+
+    /** Violación de restricción en BD (p. ej. guardados concurrentes del mismo mes). */
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrity(ex: DataIntegrityViolationException): ResponseEntity<ErrorResponse> =
+        ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ErrorResponse(listOf(FieldErrorItem("general", "Los datos entraron en conflicto. Reintenta."))))
 }
